@@ -13,67 +13,16 @@ fun main() {
 }
 
 fun processList(inputList: List<Any?>?): List<ItemData>? {
-    
     var mylist = ArrayList<ItemData>()
-    var orPos: Int
-    var orValue: Any
-    var type: String?
-    var info:String?
-    
-    var pos: Int = 0
-    
-    for(item in inputList!!){ // El ciclo recorre toda la lista
-        if(item != null){ // En caso de que el item no sea null, se opera
-            orPos = pos	// 'pos' es un contador
-            orValue = item 
-            
+    if (inputList == null) return null
+    for((pos, item) in inputList.withIndex()){ // El ciclo recorre toda la lista
+        if(item != null){ 
             when(item){ // Se analiza el item para las propiedades 'type' e 'info'
-                is String -> { //Si el item es String 
-                    
-                    type = "cadena"
-                    val n = item.length
-                    info = "L" + n
-                }
-                
+                is String -> mylist.add(ItemData(pos, item, "cadena", ("L" + item.length)))
                 is Int -> { //Si el item es entero
-                    
-                    type = "entero"
-                    
-                    if ((item % 10) == 0)
-                    	info = "M10"
-                    
-                    else if ((item % 5) == 0)
-                    	info = "M5"
-                    
-                    else if ((item % 2) == 0)
-                    	info = "M2"
-                    
-                    else 
-                    	info = null
+                    val intinfo:String? = if (item % 10 == 0) "M10" else if (item % 5 == 0) "M5" else if (item % 2 == 0) "M2" else null
+                    mylist.add(ItemData(pos, item, "entero", intinfo))
                 }
-                
-                is Boolean -> { // Si el item es boolean
-                    
-                    type = "booleano"
-                    if (item)
-                    	info = "verdadero"
-                    else 
-                    	info = "falso"
-                }
-                
-                else -> { // Si no es ninguno de los tres anteriores
-                    type = null
-                    info = null
-                }
-            }
-            
-            var funres = ItemData(originalPos = orPos, originalValue = orValue, type = type, info = info) // Se inicializa un nuevo itemData
-            mylist.add(funres) // Se agrega a la lista
-            
-        }
-        pos++ // Se le suma uno al contador		
-    }
-    
-    return mylist // Se devuelve la lista
-	
-}
+                is Boolean -> mylist.add(ItemData(pos, item, "booleano", if(item) "Verdadero" else "Falso"))
+                else -> mylist.add(ItemData(pos, item, null, null)) } } } 
+    return mylist }
